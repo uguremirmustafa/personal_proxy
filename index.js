@@ -14,7 +14,13 @@ app.get('/proxy', async (req, res) => {
   }
 
   try {
-    const response = await axios.get(targetUrl);
+    const response = await axios({
+      url: targetUrl,
+      method: req.method, // Forward the original HTTP method (GET, POST, etc.)
+      headers: req.headers, // Forward the request headers
+      data: req.body, // Forward the request body for POST/PUT
+    });
+
     res.json(response.data);
   } catch (error) {
     res.status(500).send(`Error: ${error.message}`);
