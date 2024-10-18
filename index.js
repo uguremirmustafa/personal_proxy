@@ -2,6 +2,11 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const cors = require('cors');
+const https = require('https');
+
+const agent = new https.Agent({
+  secureProtocol: 'TLSv1_2_method', // Forcing TLS 1.2
+});
 
 // Use CORS middleware to allow all origins
 app.use(cors());
@@ -19,6 +24,7 @@ async function proxyController(req, res) {
       method: req.method, // Forward the original HTTP method (GET, POST, etc.)
       headers: req.headers, // Forward the request headers
       data: req.body, // Forward the request body for POST/PUT
+      httpsAgent: agent, // Use the custom agent with TLS settings
     });
 
     res.json(response.data);
