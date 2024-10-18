@@ -6,7 +6,7 @@ const cors = require('cors');
 // Use CORS middleware to allow all origins
 app.use(cors());
 
-app.get('/proxy', async (req, res) => {
+async function proxyController(req, res) {
   const targetUrl = req.query.url; // The target URL is passed as a query parameter
 
   if (!targetUrl) {
@@ -25,7 +25,10 @@ app.get('/proxy', async (req, res) => {
   } catch (error) {
     res.status(500).send(`Error: ${error.message}`);
   }
-});
+}
+
+app.get('/proxy', proxyController);
+app.post('/proxy', proxyController);
 
 // Set Vercel's default port
 app.listen(3000, () => {
