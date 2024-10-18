@@ -38,5 +38,6 @@ app.post('/proxy', proxyController);
 
 // Set Vercel's default port
 app.listen(3000, () => {
+  console.log(process.version);
   console.log('Proxy server running on port 3000');
 });
