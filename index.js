@@ -13,6 +13,7 @@ app.use(
   cors({
     allowedHeaders: {
       'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
     },
   })
 );
