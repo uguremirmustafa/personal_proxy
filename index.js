@@ -9,7 +9,13 @@ const agent = new https.Agent({
 });
 
 // Use CORS middleware to allow all origins
-app.use(cors({ allowedHeaders: '*' }));
+app.use(
+  cors({
+    allowedHeaders: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  })
+);
 
 async function proxyController(req, res) {
   const targetUrl = req.query.url; // The target URL is passed as a query parameter
