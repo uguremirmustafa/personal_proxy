@@ -1,18 +1,24 @@
-const http = require('http');
-const httpProxy = require('http-proxy');
+const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const cors = require('cors');
 
-// Create a new instance of http-proxy
-const proxy = httpProxy.createProxyServer({});
+const app = express();
 
-// Start the proxy server
-http
-  .createServer((req, res) => {
-    const targetUrl = req.query.url; // Modify the Origin header
-    req.headers['origin'] = targetUrl;
+app.use(cors());
 
-    // Forward the request to the target server
-    proxy.web(req, res, { target: targetUrl });
-  })
-  .listen(3000, () => {
-    console.log('Proxy server is running on port 3000');
-  });
+const proxyTable = {
+  '/api': 'https://v2-api.obilet.com/api',
+};
+
+const apiProxy = createProxyMiddleware({
+  changeOrigin: true,
+  router: proxyTable,
+  target: 'https://v2-api.obilet.com/api',
+});
+
+app.use(apiProxy);
+
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
