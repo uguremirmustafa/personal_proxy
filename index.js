@@ -18,14 +18,19 @@ async function proxyController(req, res) {
     return res.status(400).send('Please provide a URL.');
   }
 
+  const axiosObj = {
+    url: targetUrl,
+    method: req.method, // Forward the original HTTP method (GET, POST, etc.)
+    headers: {
+      ...req.headers,
+      origin: targetUrl,
+    },
+    data: req.body, // Forward the request body for POST/PUT
+    httpsAgent: agent, // Use the custom agent with TLS settings
+  };
+  console.log(axiosObj);
   try {
-    const response = await axios({
-      url: targetUrl,
-      method: req.method, // Forward the original HTTP method (GET, POST, etc.)
-      headers: req.headers, // Forward the request headers
-      data: req.body, // Forward the request body for POST/PUT
-      httpsAgent: agent, // Use the custom agent with TLS settings
-    });
+    const response = await axios(axiosObj);
 
     res.json(response.data);
   } catch (error) {
